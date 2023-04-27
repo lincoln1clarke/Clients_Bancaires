@@ -6,14 +6,14 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="584.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SampleController">
+<AnchorPane prefHeight="615.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SampleController">
    <children>
-      <Label layoutX="439.0" layoutY="8.0" text="Clients">
+      <Label layoutX="439.0" layoutY="28.0" text="Clients">
          <font>
             <Font size="22.0" />
          </font>
       </Label>
-      <TableView fx:id="clientsTable" layoutX="84.0" layoutY="44.0" prefHeight="346.0" prefWidth="792.0">
+      <TableView fx:id="clientsTable" layoutX="84.0" layoutY="64.0" prefHeight="349.0" prefWidth="792.0">
         <columns>
           <TableColumn fx:id="nameColumn" prefWidth="145.0" text="Name" />
           <TableColumn fx:id="lastNameColumn" prefWidth="134.0" text="Last Name" />
@@ -23,7 +23,7 @@
             <TableColumn fx:id="riskColumn" prefWidth="151.0" text="Risk Level" />
         </columns>
       </TableView>
-      <GridPane layoutX="93.0" layoutY="397.0" prefHeight="113.0" prefWidth="775.0">
+      <GridPane layoutX="93.0" layoutY="429.0" prefHeight="113.0" prefWidth="775.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="158.0" minWidth="10.0" prefWidth="120.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="236.0" minWidth="10.0" prefWidth="220.0" />
@@ -50,10 +50,36 @@
             <TextField fx:id="moneyBox" GridPane.columnIndex="3" />
          </children>
       </GridPane>
-      <Button fx:id="addBtn" layoutX="291.0" layoutY="532.0" mnemonicParsing="false" onAction="#add" prefHeight="31.0" prefWidth="100.0" text="Add" />
-      <Button fx:id="modifyBtn" layoutX="441.0" layoutY="532.0" mnemonicParsing="false" onAction="#modify" prefHeight="31.0" prefWidth="100.0" text="Modify" />
-      <Button fx:id="eraseBtn" layoutX="590.0" layoutY="532.0" mnemonicParsing="false" onAction="#erase" prefHeight="31.0" prefWidth="110.0" text="Erase client" />
-      <Button fx:id="restartBtn" layoutX="740.0" layoutY="532.0" mnemonicParsing="false" onAction="#restart" text="Restart" />
-      <Button layoutX="166.0" layoutY="532.0" mnemonicParsing="false" onAction="#clearFieldsPressed" text="Clear fields" />
+      <MenuBar layoutX="-6.0" prefHeight="32.0" prefWidth="166.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#handleNew" text="New" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleOpen" text="Open" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleSave" text="Save" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleSaveAs" text="Save as" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <HBox alignment="CENTER" layoutX="145.0" layoutY="557.0" prefHeight="44.0" prefWidth="693.0" spacing="27.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#clearFieldsPressed" text="Clear fields" />
+            <Button fx:id="addBtn" mnemonicParsing="false" onAction="#add" prefHeight="31.0" prefWidth="100.0" text="Add" />
+            <Button fx:id="modifyBtn" mnemonicParsing="false" onAction="#modify" prefHeight="31.0" prefWidth="100.0" text="Modify" />
+            <Button fx:id="eraseBtn" mnemonicParsing="false" onAction="#erase" prefHeight="31.0" prefWidth="110.0" text="Erase client" />
+            <Button fx:id="restartBtn" mnemonicParsing="false" onAction="#restart" text="Restart" />
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

@@ -1,13 +1,20 @@
 package application;
 
+import java.io.File;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.FileChooser;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -206,7 +213,110 @@ public class SampleController implements Initializable{
         	}
     	}
     }
-
+    
+    
+    //Saving
+    public File getClientsFilePath() {
+    	Preferences prefs = Preferences.userNodeForPackage(Main.class);
+    	String filePath = prefs.get("filePath", null);
+    	
+    	if(filePath!=null){
+    		return new File(filePath);
+    	}else {
+    		return null;
+    	}
+    }
+    
+    public void setClientsFilePath(File file) {
+    	Preferences prefs = Preferences.userNodeForPackage(Main.class);
+    	
+    	if(file != null) {
+    		prefs.put("filePath", file.getPath());
+    	}else {
+    		prefs.remove("filePath");
+    	}
+    }
+    
+    public void loadClientData(File file) {
+    	try{
+    		JAXBContext context = new JAXBContext.newInstance(ClientListWrapper.class);
+    		Unmarshaller um = context.createUnmarshaller();
+    		
+    		ClientListWrapper wrapper = (ClientListWrapper) um.unmarshal(file);
+    		clientData.clear();
+    		clientData.addAll(wrapper.getClients());
+    		setClientsFilePath(file);
+    	}catch (Exception e){
+    		Alert alert = new Alert(AlertType.ERROR);
+			alert.setHeaderText("Error");
+    		alert.setTitle("Loading failed");
+    		alert.setContentText("The application was not able to load client data from this file:\n" + file.getPath());
+    		alert.showAndWait();
+    	}
+    }
+    
+    public void saveClientData(File file) {
+    	try{
+    		JAXBContext context = new JAXBContext.newInstance(ClientListWrapper.class);
+    		Marshaller m = context.createMarshaller();
+    		m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+    		ClientListWrapper wrapper = new ClientListWrapper();
+    		wrapper.setClients(clientData);    		
+    		
+    		setClientsFilePath(file);
+    	}catch (Exception e){
+    		Alert alert = new Alert(AlertType.ERROR);
+			alert.setHeaderText("Error");
+    		alert.setTitle("Saving failed");
+    		alert.setContentText("The application was not able to save client data to this file:\n" + file.getPath());
+    		alert.showAndWait();
+    	}
+    }
+    @FXML
+    private void handleNew() {
+    	getClientData().clear();
+    	setClientsFilePath(null);
+    }
+    
+    @FXML
+    private void handleOpen() {
+    	FileChooser fileChooser = new FileChooser();
+    	
+    	FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
+    	fileChooser.getExtensionFilters().add(extFilter);
+    	
+    	File file = fileChooser.showOpenDialog(null);
+    	if(file!=null) {
+    		loadClientData(file);
+    	}
+    }
+    
+    @FXML
+    private void handleSave() {
+    	File clientsFile = getClientsFilePath();
+    	if(clientsFile != null) {
+    		saveClientData(clientsFile);
+    	}else {
+    		handleSaveAs();
+    	}
+    }
+    
+    @FXML
+    private void handleSaveAs() {
+    	FileChooser fileChooser = new FileChooser();
+    	FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
+    	fileChooser.getExtensionFilters().add(extFilter);
+    	
+    	File file = fileChooser.showSaveDialog(null);
+    	
+    	if(file != null) {
+    		if(!file.getPath().endsWith(".xml")) {
+    			file = new File(file.getPath() + ".xml");
+    		}
+    		saveClientData(file);
+    	}
+    }
+    
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
