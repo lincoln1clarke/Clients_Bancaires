@@ -239,7 +239,7 @@ public class SampleController implements Initializable{
     
     public void loadClientData(File file) {
     	try{
-    		JAXBContext context = new JAXBContext.newInstance(ClientListWrapper.class);
+    		JAXBContext context = JAXBContext.newInstance(ClientListWrapper.class);
     		Unmarshaller um = context.createUnmarshaller();
     		
     		ClientListWrapper wrapper = (ClientListWrapper) um.unmarshal(file);
@@ -257,7 +257,7 @@ public class SampleController implements Initializable{
     
     public void saveClientData(File file) {
     	try{
-    		JAXBContext context = new JAXBContext.newInstance(ClientListWrapper.class);
+    		JAXBContext context = JAXBContext.newInstance(ClientListWrapper.class);
     		Marshaller m = context.createMarshaller();
     		m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
     		ClientListWrapper wrapper = new ClientListWrapper();
